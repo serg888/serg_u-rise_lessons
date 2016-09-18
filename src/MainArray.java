@@ -23,7 +23,7 @@ public class MainArray {
                 uuid = params[1].intern();
             }
             switch (params[0]) {
-                case "list":
+                case "list1":
                     printAll();
                     break;
                 case "size":
