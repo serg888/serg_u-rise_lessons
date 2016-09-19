@@ -5,55 +5,50 @@ import java.util.List;
 
 /**
  * Array based storage for Resumes
+ * Test Branches
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    static int i=0;
+    static int size=0;
 
     void clear() {
         storage=new Resume[10000];
+        size=0;
     }
 
     void save(Resume r) {
-        storage[i++]=r;
+        storage[size++]=r;
     }
 
     Resume get(String uuid) {
-        Resume[]r=getAll();
-        for(Resume r1:r)
-          if(r1.uuid.equals(uuid)) return r1;
-        if(true)return new Resume();
+
+        for(int i=0;i<size;i++)
+            if(storage[i].uuid.equals(uuid)) return storage[i];
+
         return null;
 
     }
 
     void delete(String uuid) {
         boolean isFind=false;
-        for(int i=0;i<storage.length;i++){
-            if(storage[i]!=null)
-                if (storage[i].uuid.equals(uuid)) isFind=true;
+        for(int i=0;i<size;i++){
+            if(storage[i]!=null&&!isFind)
+                if (storage[i].uuid.equals(uuid))
+                    isFind=true;
             if(isFind){
-                if(i<storage.length-2)storage[i]=storage[i+1];else
+                if(i<size-1)storage[i]=storage[i+1];else
                     storage[i]=null;
             }
         }
+        if(isFind)size--;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
-        List<Resume>r=new ArrayList<>();
-        for(Resume r1:storage)
-          if(r1!=null)r.add(r1);
-        Resume[]rm=new Resume[r.size()];
-        for(int i=0;i<r.size();i++)
-            rm[i]=r.get(i);
-
-        return rm;
-    }
+    Resume[] getAll() {        return Arrays.copyOfRange(storage,0,size);    }
 
     int size() {
-        return getAll().length;
+        return size;
     }
 }
