@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    static int size=0;
+    private int size=0;
 
     void clear() {
         storage=new Resume[10000];
@@ -17,7 +17,9 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        storage[size++]=r;
+
+        if(size<storage.length) storage[size++]=r; else
+            System.out.println("Not enough space");
     }
 
     Resume get(String uuid) {
