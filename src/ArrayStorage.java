@@ -8,13 +8,14 @@ import java.util.List;
  * Test Branches
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
-    public final int arrayLenght=storage.length;
+    public final int arrayLenght=10000;
+    Resume[] storage = new Resume[arrayLenght];
     private int size=0;
-
 
     void clear() {
         storage=new Resume[10000];
+        for(int i=0;i<size;i++)
+            storage[i]=null;
         size=0;
     }
 
@@ -40,18 +41,16 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        boolean isFind=false;
         for(int i=0;i<size;i++){
                 if (storage[i].uuid.equals(uuid)){
-                    isFind=true;
                     storage[i]=storage[size-1];
                     storage[size-1]=null;
-                    break;
+                    size--;
+                    return;
                 }
 
         }
-        if(isFind)size--; else
-            System.out.println("Error: resume not found");
+        System.out.println("Error: resume not found");
     }
 
     /**
