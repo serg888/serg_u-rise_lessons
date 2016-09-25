@@ -27,7 +27,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     public void delete(String uuid) {
         //если резюме есть, то удалить
         int i=getResumeIndex(uuid);
-        if(i!=-1){
+        if(i>=0){
             for(int i1=i;i1<size-1;i1++)
                 storage[i1]=storage[i1+1];
 

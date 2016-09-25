@@ -28,7 +28,7 @@ public abstract class AbstractArrayStorage implements Storage{
 
     }
     protected boolean isPossyblyToUpdate(Resume r){
-        if(getResumeIndex(r.getUuid())==-1){
+        if(getResumeIndex(r.getUuid())<0){
             System.out.println(RES_NOT_FOUND);
             return false;
         }
@@ -44,7 +44,7 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public Resume get(String uuid) {
         int i=getResumeIndex(uuid);
-        return (i==-1)?null:storage[i];
+        return (i<0)?null:storage[i];
     }
 
     public Resume[] getAll() {return Arrays.copyOfRange(storage,0,size);    }
