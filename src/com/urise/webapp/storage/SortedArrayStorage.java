@@ -10,38 +10,24 @@ import java.util.Collections;
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-
-    @Override
-    public void update(Resume r) {
-        if(isPossyblyToUpdate(r)) storage[getResumeIndex(r.getUuid())]=r;
-        Arrays.sort(storage,0,size);
-    }
-
-    @Override
-    public void save(Resume r) {
-        if(isPossiblyToSave(r)) storage[size++]=r;
-        Arrays.sort(storage,0,size);
-    }
-
-    @Override
-    public void delete(String uuid) {
-        //если резюме есть, то удалить
-        int i=getResumeIndex(uuid);
-        if(i>=0){
-            for(int i1=i;i1<size-1;i1++)
-                storage[i1]=storage[i1+1];
-
-            storage[size-1]=null;
-            size--;
-        } else
-            System.out.println(RES_NOT_FOUND);
-
-    }
-
     @Override
     public int getResumeIndex(String uuid) {
         Resume searchKey=new Resume();
         searchKey.setUuid(uuid);
         return Arrays.binarySearch(storage,0,size,searchKey);
+    }
+
+    @Override
+    protected void insert(Resume r, int i) {
+        for(int i1=size;i1>-(i+1);i1--)
+            storage[i1]=storage[i1-1];
+        storage[-(i+1)]=r;
+        size++;
+    }
+
+    @Override
+    protected void fillDeletedElement(int i) {
+        for(int i1=i;i1<size-1;i1++)
+            storage[i1]=storage[i1+1];
     }
 }

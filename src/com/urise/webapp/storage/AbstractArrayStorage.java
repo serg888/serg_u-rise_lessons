@@ -14,33 +14,38 @@ public abstract class AbstractArrayStorage implements Storage{
     protected static final String RES_NOT_FOUND="Error: resume not found";
     protected int size=0;
 
-
-    protected boolean isPossiblyToSave(Resume r){
+    public void save(Resume r){
         int i=getResumeIndex(r.getUuid());
         if(i<0)
         {
             //сравнение с переменной (на непревышение максимальной длины массива)
-            if(size< ARRAY_LENGHT) return true; else
+            if(size< ARRAY_LENGHT) insert(r,i); else
                 System.out.println("Error: Not enough space");
         } else
             System.out.println("Error: this resume is already in array " +i);
-        return false;
-
     }
-    protected boolean isPossyblyToUpdate(Resume r){
-        if(getResumeIndex(r.getUuid())<0){
+
+    public void update(Resume r){
+        delete(r.getUuid());
+        save(r);
+    }
+
+    public void delete(String uuid) {
+        //если резюме есть, то удалить
+        int i=getResumeIndex(uuid);
+        if(i>=0){
+            storage[i]=storage[size-1];
+            fillDeletedElement(i);
+            storage[size-1]=null;
+            size--;
+        } else
             System.out.println(RES_NOT_FOUND);
-            return false;
-        }
-        else return true;
-
     }
+
     public void clear() {
         Arrays.fill(storage,0,size,null);
         size=0;
     }
-
-    public abstract int getResumeIndex(String uuid);
 
     public Resume get(String uuid) {
         int i=getResumeIndex(uuid);
@@ -49,8 +54,15 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public Resume[] getAll() {return Arrays.copyOfRange(storage,0,size);    }
 
-
     public int size() {
         return size;
     }
+
+    protected abstract int getResumeIndex(String uuid);
+
+    protected abstract void insert(Resume r, int i);
+
+    protected abstract void fillDeletedElement(int i);
+
+
 }
