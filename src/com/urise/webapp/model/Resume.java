@@ -1,6 +1,7 @@
 package com.urise.webapp.model;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * com.urise.webapp.model.com.urise.webapp.model.Resume class
@@ -8,8 +9,15 @@ import java.util.ArrayList;
 public class Resume implements Comparable{
 
     // Unique identifier
-    private String uuid;
+    private final String uuid;
 
+
+    public Resume(){
+        this(UUID.randomUUID().toString());
+    }
+    public Resume(String uuid) {
+        this.uuid = uuid;
+    }
 
     @Override
     public String toString() {
@@ -20,9 +28,7 @@ public class Resume implements Comparable{
         return uuid;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+
 
     @Override
     public boolean equals(Object o) {
