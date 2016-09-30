@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -9,7 +12,7 @@ import java.util.Arrays;
  * Test Branches
  */
 public abstract class AbstractArrayStorage implements Storage{
-    protected static final int ARRAY_LENGHT =100000;
+    protected static final int ARRAY_LENGHT =1000;
     protected Resume[] storage = new Resume[ARRAY_LENGHT];
     protected static final String RES_NOT_FOUND="Error: resume not found";
     protected int size=0;
@@ -20,9 +23,9 @@ public abstract class AbstractArrayStorage implements Storage{
         {
             //сравнение с переменной (на непревышение максимальной длины массива)
             if(size< ARRAY_LENGHT) insert(r,i); else
-                System.out.println("Error: Not enough space");
+                throw new StorageException("Error: Not enough space",r.getUuid());
         } else
-            System.out.println("Error: this resume is already in array " +i);
+            throw new ExistStorageException("Error: this resume is already in array",r.getUuid());
     }
 
     public void update(Resume r){
@@ -39,7 +42,7 @@ public abstract class AbstractArrayStorage implements Storage{
             storage[size-1]=null;
             size--;
         } else
-            System.out.println(RES_NOT_FOUND);
+            throw new NotExistStorageException("Error: resume not found",uuid);
     }
 
     public void clear() {
