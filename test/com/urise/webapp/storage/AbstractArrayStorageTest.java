@@ -90,7 +90,7 @@ public  abstract class AbstractArrayStorageTest {
         Class superClass=storage.getClass().getSuperclass();
         Field field=superClass.getDeclaredField("storage");
         Resume[] resumes=(Resume[])field.get(storage);
-        for(int i=3;i<=resumes.length;i++)
+        for(int i=3; i<=resumes.length; i++)
             storage.save(new Resume("uuid_new"+i));
     }
 
