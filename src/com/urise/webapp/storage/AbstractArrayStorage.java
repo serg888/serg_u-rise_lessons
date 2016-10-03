@@ -6,66 +6,77 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
  * Test Branches
  */
-public abstract class AbstractArrayStorage implements Storage{
-    protected static final int ARRAY_LENGHT =1000;
+public abstract class AbstractArrayStorage extends AbstractStorage {
+    protected static final int ARRAY_LENGHT = 1000;
     protected Resume[] storage = new Resume[ARRAY_LENGHT];
-    protected static final String RES_NOT_FOUND="Error: resume not found";
-    protected int size=0;
+    protected int size = 0;
 
-    public void save(Resume r){
-        int i=getResumeIndex(r.getUuid());
-        if(i<0)
-        {
-            //сравнение с переменной (на непревышение максимальной длины массива)
-            if(size< ARRAY_LENGHT) insert(r,i); else
-                throw new StorageException("Error: Not enough space",r.getUuid());
-        } else
-            throw new ExistStorageException("Error: this resume is already in array",r.getUuid());
+    protected abstract void insert(Resume r, int i);
+    protected abstract void fillDeletedElement(int i);
+
+    @Override
+    protected void doSave(Resume r, Object searchKey){
+        int i=(Integer)searchKey;
+        if(i<0){
+            if(size<ARRAY_LENGHT){
+                insert(r, i);
+            }else {
+                throw new StorageException("Error: Not enough space", r.getUuid());
+            }
+        }
     }
 
-    public void update(Resume r){
-        delete(r.getUuid());
-        save(r);
+    @Override
+    protected void doUpdate(Resume r, Object searchKey) {
+        storage[(Integer) searchKey] = r;
     }
 
-    public void delete(String uuid) {
-        //если резюме есть, то удалить
-        int i=getResumeIndex(uuid);
-        if(i>=0){
-            storage[i]=storage[size-1];
+    @Override
+    protected void doDelete(Object searchKey){
+        int i=(Integer)searchKey;
+        if (i >= 0) {
+            storage[i] = storage[size - 1];
             fillDeletedElement(i);
-            storage[size-1]=null;
+            storage[size - 1] = null;
             size--;
-        } else
-            throw new NotExistStorageException("Error: resume not found",uuid);
+        }
     }
 
+    @Override
     public void clear() {
-        Arrays.fill(storage,0,size,null);
-        size=0;
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
-    public Resume get(String uuid) {
-        int i=getResumeIndex(uuid);
+    @Override
+    protected Resume doGet(Object searchKey){
+        int i=(Integer)searchKey;
         return (i<0)?null:storage[i];
     }
 
-    public Resume[] getAll() {return Arrays.copyOfRange(storage,0,size);    }
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume>list=Arrays.asList(Arrays.copyOfRange(storage,0,size));
+        Collections.sort(list);
+        return list;
+    }
 
-    public int size() {
+    @Override
+    public int size(){
         return size;
     }
 
-    protected abstract int getResumeIndex(String uuid);
-
-    protected abstract void insert(Resume r, int i);
-
-    protected abstract void fillDeletedElement(int i);
-
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return ((Integer)searchKey<0)?false:true;
+    }
 
 }

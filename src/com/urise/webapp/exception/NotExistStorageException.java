@@ -5,7 +5,7 @@ package com.urise.webapp.exception;
  */
 public class NotExistStorageException extends StorageException {
 
-    public NotExistStorageException(String message, String uuid) {
-        super(message, uuid);
+    public NotExistStorageException(String uuid) {
+        super("Error: resume not found", uuid);
     }
 }
