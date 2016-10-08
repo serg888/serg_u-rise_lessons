@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  */
 public class MainReflection {
     public static void main(String[] arg) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Resume r = new Resume();
+        Resume r = new Resume("dummy");
         Field f = r.getClass().getDeclaredFields()[0];
         f.setAccessible(true);
         System.out.println(f.getName());

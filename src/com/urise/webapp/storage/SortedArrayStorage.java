@@ -3,17 +3,23 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Сергей on 25.09.2016.
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
 
+    private static Comparator<Resume> comparator=new Comparator<Resume>() {
+        @Override
+        public int compare(Resume o1, Resume o2) {
+            return o1.getUuid().compareTo(o2.getUuid());
+        }
+    };
     @Override
     public Object getSearchKey(String uuid) {
-        Resume searchKey=new Resume(uuid);
-        return Arrays.binarySearch(storage,0,size,searchKey);
+        Resume searchKey=new Resume(uuid,"dummy" );
+        return Arrays.binarySearch(storage,0,size,searchKey,comparator);
     }
 
     @Override

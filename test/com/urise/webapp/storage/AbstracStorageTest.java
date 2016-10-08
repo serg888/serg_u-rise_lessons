@@ -3,14 +3,12 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -21,23 +19,16 @@ public abstract class AbstracStorageTest {
     protected Storage storage;
 
     private static final String UUID_1 = "uuid1";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
+    protected static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
 
     private static final String UUID_2 = "uuid2";
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
+    protected static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
 
     private static final String UUID_3 = "uuid3";
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
+    protected static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
 
     private static final String UUID_4 = "uuid4";
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
-
-    static {
-        RESUME_1.setFullName("Vasya");
-        RESUME_2.setFullName("Petya");
-        RESUME_3.setFullName("Avrik");
-        RESUME_4.setFullName("Yasha");
-    }
+    protected static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
 
 
     protected AbstracStorageTest(Storage storage) {
@@ -62,11 +53,11 @@ public abstract class AbstracStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void update() throws Exception {
-        Resume newResume=new Resume(UUID_1);
+        Resume newResume=new Resume(UUID_1, "Zhenya");
         Resume oldResume=RESUME_1;
         storage.update(newResume);
         assertSize(3);
-        assertGet(RESUME_1);
+        assertEquals(newResume,storage.get(UUID_1));
         assertTrue(storage.get(UUID_1)!=oldResume);
         storage.update(RESUME_4);
 
@@ -102,9 +93,7 @@ public abstract class AbstracStorageTest {
         //must be overrided for sorted
         List<Resume> resumes = storage.getAllSorted();
         assertEquals(3, resumes.size());
-        assertEquals(RESUME_3, resumes.get(0));
-        assertEquals(RESUME_2, resumes.get(1));
-        assertEquals(RESUME_1, resumes.get(2));
+        assertEquals(resumes, Arrays.asList(RESUME_1,RESUME_2,RESUME_3));
     }
 
     @Test
@@ -114,38 +103,22 @@ public abstract class AbstracStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExistRezume() throws Exception {
-        Resume r=new Resume(UUID_1);
-        storage.save(new Resume(UUID_1));
+        Resume r=new Resume(UUID_1, "Vasya");
+        storage.save(new Resume(UUID_1,"Vasya" ));
         assertTrue(r!=storage.get(UUID_1));
     }
 
-    @Test(expected = StorageException.class)
-    public void overflow() throws Exception {
-        Class superClass = storage.getClass().getSuperclass();
-        Field field = superClass.getDeclaredField("storage");
-        Resume[] resumes = (Resume[]) field.get(storage);
-        try {
-            for (int i = 3; i < resumes.length; i++) {
-                storage.save(new Resume());
-            }
-        } catch(StorageException e){
-            fail();
-        }
-        assertSize(resumes.length);
-        storage.save(new Resume());
-
-    }
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExistResume() {
         storage.delete("dummy");
     }
 
-    private void assertSize(int size) {
+    protected void assertSize(int size) {
         assertEquals(size, storage.size());
     }
 
-    private void assertGet(Resume r) {
+    protected void assertGet(Resume r) {
         assertEquals(r, storage.get(r.getUuid()));
     }
 

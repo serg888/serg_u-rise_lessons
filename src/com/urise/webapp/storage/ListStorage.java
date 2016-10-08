@@ -7,6 +7,7 @@ import java.util.*;
 /**
  * Created by Сергей on 01.10.2016.
  */
+
 public class ListStorage extends AbstractStorage {
     private List<Resume> list;
 
@@ -20,9 +21,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Collections.sort(list);
-        return list;
+    public List<Resume> doCopyAll() {
+        return new ArrayList<>(list);
     }
 
     @Override

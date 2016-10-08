@@ -14,10 +14,4 @@ public class ListStorageTest extends AbstracStorageTest{
         super(new ListStorage());
     }
 
-    @Override
-    @Ignore
-    @Test
-    public void overflow() throws Exception {
-
-    }
 }

@@ -14,11 +14,4 @@ public class MapUUIDStorageTest extends AbstracStorageTest{
         super(new MapUUIDStorage());
     }
 
-    @Override
-    @Test
-    @Ignore
-    public void overflow() throws Exception {
-
-    }
-
 }
