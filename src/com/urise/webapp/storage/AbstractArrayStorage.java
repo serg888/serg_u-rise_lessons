@@ -14,7 +14,7 @@ import java.util.List;
  * Array based storage for Resumes
  * Test Branches
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int ARRAY_LENGHT = 1000;
     protected Resume[] storage = new Resume[ARRAY_LENGHT];
     protected int size = 0;
@@ -23,8 +23,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void fillDeletedElement(int i);
 
     @Override
-    protected void doSave(Resume r, Object searchKey){
-        int i=(Integer)searchKey;
+    protected void doSave(Resume r, Integer searchKey){
+        int i=searchKey;
         if(i<0){
             if(size<ARRAY_LENGHT){
                 insert(r, i);
@@ -35,13 +35,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        storage[(Integer) searchKey] = r;
+    protected void doUpdate(Resume r, Integer searchKey) {
+        storage[searchKey] = r;
     }
 
     @Override
-    protected void doDelete(Object searchKey){
-        int i=(Integer)searchKey;
+    protected void doDelete(Integer searchKey){
+        int i=searchKey;
         if (i >= 0) {
             storage[i] = storage[size - 1];
             fillDeletedElement(i);
@@ -57,8 +57,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object searchKey){
-        int i=(Integer)searchKey;
+    protected Resume doGet(Integer searchKey){
+        int i=searchKey;
         return (i<0)?null:storage[i];
     }
 
@@ -74,8 +74,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return ((Integer)searchKey<0)?false:true;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey>=0;
     }
 
 }

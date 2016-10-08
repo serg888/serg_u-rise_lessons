@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by Сергей on 01.10.2016.
  */
-public class MapUUIDStorage extends AbstractStorage {
+public class MapUUIDStorage extends AbstractStorage<String> {
     private Map<String, Resume> map;
 
     public MapUUIDStorage() {
@@ -31,36 +31,36 @@ public class MapUUIDStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        map.put((String)searchKey,r);
+    protected void doUpdate(Resume r, String searchKey) {
+        map.put(searchKey,r);
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        String s=(String)searchKey;
+    protected boolean isExist(String searchKey) {
+        String s=searchKey;
         char c=s.charAt(0);
-        return (c=='-')?false:true;
+        return c!='-';
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
-        String s=(String)searchKey;
+    protected void doSave(Resume r, String searchKey) {
+        String s=searchKey;
         String key=s.substring(1);
         map.put(key,r);
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        map.remove((String)searchKey);
+    protected void doDelete(String searchKey) {
+        map.remove(searchKey);
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return (map.get(uuid)==null)?("-"+uuid):uuid;
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return map.get((String)searchKey);
+    protected Resume doGet(String searchKey) {
+        return map.get(searchKey);
     }
 }
