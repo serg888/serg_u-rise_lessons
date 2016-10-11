@@ -37,9 +37,9 @@
 
 ![image](https://cloud.githubusercontent.com/assets/18701152/15710172/6cb15a66-2811-11e6-8739-4e289d1ea799.png)
 
-- Реализуйте класс `ArrayStorage`: хранение резюме на основе массива (методы `clear, get, save, delete, getAll, size`).
-- Протестируйте вашу реализацию, запустив `MainTestArrayStorage.main()`: в IDEA слева на полях зеленая стрелка.
-- Протестируйте вашу реализацию интерактивно с помощью `MainArray.main()`.
+- Реализуйте класс `com.urise.webapp.storage.ArrayStorage`: хранение резюме на основе массива (методы `clear, get, save, delete, getAll, size`).
+- Протестируйте вашу реализацию, запустив `com.urise.webapp.MainArray.main()`: в IDEA слева на полях зеленая стрелка.
+- Протестируйте вашу реализацию интерактивно с помощью `com.urise.webapp.MainArrayOldTest.main()`.
 
 ## <a href="http://java.subscribemenow.com/">Зарегистрироваться</a> для получения бесплатного доступа к первому уроку
 
